@@ -4,25 +4,24 @@
 class Plansza
 {
     public:
-    int n,m;
+    int ileKolumn,ileWierszy;
     Plansza()
     {}
-    char** tab=new char*[n];
-    void mapa(int n,int m);
+    char** tab=new char*[ileKolumn];
+    void mapa(int ileKolumn,int ileWierszy);
 };
 
-void Plansza::mapa(int n,int m)
+void Plansza::mapa(int ileKolumn,int ileWierszy)
 {
 
-    for(int i=0;i<n;i++)
-
+    for(int i=0;i<ileKolumn;i++)
     {
-    tab[i]=new char[m];
+    tab[i]=new char[ileWierszy];
     }
 
-    for(int i=0;i<n;i++)
+    for(int i=0;i<ileKolumn;i++)
     {
-        for(int j=0;j<m;j++)
+        for(int j=0;j<ileWierszy;j++)
         {
             tab[i][j]=' ';
         }
@@ -32,79 +31,90 @@ class Snake:public Plansza
 {
     int dlgOgona;
     int kierunek=26;
-    char* wsknakoniec=new char;
-    char* wsknaGlowe=new char;
+    char* wskOgon=new char;
+    char* wskGlowa=new char;
 
 public:
     void start()
-    {   int i=3,j=6,r=m/2;
-        wsknakoniec=&tab[i][m/2];
-        for(i;i<j;i++)
-            tab[i][m/2]='o';
-        tab[j][r]='@';
-        ruch(23,j,r,i);
+    {   int ogonKolumna=3,ogonWiersz=3,glowaKolumna=6,glowaWiersz=ogonWiersz;
+        wskOgon=&tab[ogonKolumna][ogonWiersz];
+        wskGlowa=&tab[glowaKolumna][glowaWiersz];
+        for(ogonKolumna;ogonKolumna<glowaKolumna;ogonKolumna++)
+            tab[ogonKolumna][ogonWiersz]='o';
+        tab[glowaKolumna][glowaWiersz]='@';
+        ruch(kierunek,ogonKolumna,ogonWiersz,glowaKolumna,glowaWiersz);//na poczatku w prawo
 
     }
-    void ruch(int kierunek,int j,int r,int i)
+    void ruch(int kierunek,int ogonKolumna,int ogonWiersz,int glowaKolumna,int glowaWiersz)
     {
-        if(kierunek==24)
+        if(kierunek==24) //gora
         {
             do
             {
-                *wsknakoniec=' ';
-                i++;
-                wsknakoniec=&tab[i][r];
-                tab[j][r]='o';
-                j++;
-                tab[j][r]='@';
-            }while(_kbhit());
+                *wskOgon=' ';
+                ogonKolumna++;
+                wskOgon=&tab[ogonKolumna][ogonWiersz];
+                *wskGlowa='o';
+                glowaWiersz++;
+                wskGlowa=&tab[glowaKolumna][glowaWiersz];
+                *wskGlowa='@';
+            }while(_kbhit()); //dopoki nie wpisze znaku
         }
-        else if(kierunek==25)
+        else if(kierunek==25)//dol
         {
            do
             {
-                *wsknakoniec=' ';
-                wsknakoniec=&tab[i][r];
-                tab[j][r]='o';
-                j--;
-                tab[j+1][r]='o';
+                *wskOgon=' ';
+                ogonKolumna++;
+                wskOgon=&tab[ogonKolumna][ogonWiersz];
+                *wskGlowa='o';
+                glowaWiersz--;
+                wskGlowa=&tab[glowaKolumna][glowaWiersz];
+                *wskGlowa='@';
             }while(_kbhit() );
         }
-        else if(kierunek==26)
+        else if(kierunek==26)//prawo
         {
              do
             {
-                *wsknakoniec=' ';
-                wsknakoniec=&tab[i+1][r];
-                tab[j][r]='o';
-                i++;
-                tab[j+1][r]='o';
+                *wskOgon=' ';
+                ogonKolumna++;
+                wskOgon=&tab[ogonKolumna][ogonWiersz];
+                *wskGlowa='o';
+                glowaKolumna++;
+                wskGlowa=&tab[glowaKolumna][glowaWiersz];
+                *wskGlowa='@';
             }while(_kbhit() );
         }
-        else if(kierunek==27)
+        else if(kierunek==27)//lewo
         {
             do
             {
-                *wsknakoniec=' ';
-                wsknakoniec=&tab[i][r];
-                tab[j][r]='o';
-                i--;
-                tab[j+1][r]='o';
+                *wskOgon=' ';
+                ogonKolumna++;
+                wskOgon=&tab[ogonKolumna][ogonWiersz];
+                *wskGlowa='o';
+                glowaKolumna--;
+                wskGlowa=&tab[glowaKolumna][glowaWiersz];
+                *wskGlowa='@';
             }while(_kbhit() );
         }
-        else
-        {
-            do
-            {
-                *wsknakoniec=' ';
-                tab[j][r]='o';
-                i++;
-                tab[j+1][r]='o';
-            }while(_kbhit() );
-        }
+       // else
+        //{
+          //  do
+            //{
+              //  *wskOgon=' ';
+                //ogonKolumna++;
+                //wskOgon=&tab[ogonKolumna][ogonWiersz];
+                //*wskGlowa='o';
+                //glowaKolumna--;
+                //wskGlowa=&tab[glowaKolumna][glowaWiersz];
+                //*wskGlowa='@';
+            //}while(_kbhit() );
+        //}
         while(_kbhit())
         {
-            ruch(kierunek,j,r,i);
+            return ruch(kierunek,ogonKolumna,ogonWiersz,glowaKolumna,glowaWiersz);
 
         }
     }
@@ -117,7 +127,4 @@ int main()
     Snake s;
     p.mapa(5,6);
     s.start();
-
-
-
 }
