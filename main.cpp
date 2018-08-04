@@ -124,5 +124,6 @@ void Snake::ruch()
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
+    std::cout << "Daniel tu byl!" << std::end;
     return 0;
 }
